@@ -24,7 +24,7 @@ class _DashBoardViewState extends State<DashBoardView> {
         child : MyDrawer()
       ),
       appBar: AppBar(
-        title: const Text("Deuxième page"),
+        title: Text(widget.mail),
       ),
       body : bodyPage(),
 

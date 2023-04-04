@@ -64,7 +64,18 @@ class _MyHomePageState extends State<MyHomePage> {
     //entrer mail
     //entrer le mot de passe
     //bouton de validation
-    return Column(
+
+    // Row --> met les élements en ligne
+    //Stack --> empile le widgets
+    //Text
+    //ElevatedButton
+    //Container
+    //Image
+    //Texfield
+    //Icon
+    //listView
+     return Column(
+
       children: [
         //image
         const SizedBox(height:10),
@@ -104,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
             shape: const StadiumBorder()
           ),
             onPressed: (){
+            //passage d'une page à une autre
               Navigator.push(context, MaterialPageRoute(
                   builder: (context){
                     return DashBoardView(mail: mail.text,password: password.text,);
