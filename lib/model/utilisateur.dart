@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digitaldschool/globale.dart';
 
 class Utilisateur {
   //attributs
@@ -11,6 +12,11 @@ class Utilisateur {
   late String email;
   List? favoris;
 
+  //variable calculé
+  String get fullName {
+    return name + " " + lastname;
+  }
+
 
 
 
@@ -22,7 +28,7 @@ class Utilisateur {
    lastname = map['NOM'];
    name = map['PRENOM'];
    email = map['EMAIL'];
-   avatar = map["AVATAR"] ?? "";
+   avatar = map["AVATAR"] ?? defaultImage;
    favoris = map["FAVORIS"] ?? [];
    Timestamp? timeprovisoire = map["BIRTHDAY"];
    if(timeprovisoire == null){

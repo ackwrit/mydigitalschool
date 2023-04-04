@@ -1,11 +1,16 @@
 import 'package:digitaldschool/controller/FirestoreHepler.dart';
+import 'package:digitaldschool/controller/permission_helper.dart';
+import 'package:digitaldschool/globale.dart';
 import 'package:digitaldschool/view/dashboard_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  PermissionHelper().init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -50,7 +55,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-  //
+  //Méthode
+  popUp(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context){
+          if (defaultTargetPlatform == TargetPlatform.iOS){
+            return CupertinoAlertDialog(
+              title: const Text("Erreur"),
+              content: const Text("Votre email et/ou votre mot de passe sont incorrectes"),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("ok")
+                )
+              ],
+
+            );
+          }
+          else
+            {
+              return AlertDialog(
+                title: const Text("Erreur"),
+                content: const Text("Votre email et/ou votre mot de passe sont incorrectes"),
+                actions: [
+                  TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: const Text("ok")
+                  )
+                ],
+              );
+            }
+        }
+    );
+  }
 
 
   @override
@@ -183,11 +226,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
               if(selection[0]== false){
                 //si on en mode inscription
-                FirestoreHelper().Inscription(mail.text, password.text, nom.text, prenom.text);
+                FirestoreHelper().Inscription(mail.text, password.text, nom.text, prenom.text).then((value) {
+                  //si la méthode fonctionne bien
+                  setState(() {
+                    monUtilisateur = value;
+                  });
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context){
+                        return DashBoardView(mail: mail.text, password: password.text);
+                      }
+                  ));
+
+
+                }).catchError((onError){
+                  //si on constate une erreur
+                  popUp();
+
+                });
               }
               else
                 {
                   //si en mode connexion
+                  FirestoreHelper().Connect(mail.text, password.text).then((value){
+                    setState(() {
+                      monUtilisateur = value;
+                    });
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context){
+                          return DashBoardView(mail: mail.text, password: password.text);
+                        }
+                    ));
+                  }).catchError((onError){
+                    popUp();
+                  });
                 }
 
 
