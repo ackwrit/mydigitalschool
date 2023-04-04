@@ -1,3 +1,4 @@
+import 'package:digitaldschool/controller/FirestoreHepler.dart';
 import 'package:digitaldschool/view/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -42,6 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
   //variables
   TextEditingController mail = TextEditingController();
   TextEditingController  password = TextEditingController();
+  TextEditingController  prenom = TextEditingController();
+  TextEditingController  nom = TextEditingController();
+  List<bool> selection = [true,false];
 
 
 
@@ -83,9 +88,63 @@ class _MyHomePageState extends State<MyHomePage> {
      return Column(
 
       children: [
+        ToggleButtons(
+          selectedColor: Colors.green,
+          onPressed: (int choix){
+            if(choix == 0){
+              setState(() {
+                selection[0]=true;
+                selection[1]= false;
+              });
+
+            }
+            else
+              {
+                setState(() {
+                  selection[0]=false;
+                  selection[1]= true;
+                });
+
+              }
+          },
+            isSelected: selection,
+            children: const [
+              Text("Connexion"),
+              Text("Inscription")
+            ]
+        ),
         //image
         const SizedBox(height:10),
         Image.network("https://www.auto-moto.com/wp-content/uploads/sites/9/2022/02/01-peugeot-208-750x410.jpg"),
+        const SizedBox(height:10),
+
+
+        //prenom
+
+        (selection[0] == false)?TextField(
+          controller: prenom,
+          decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              hintText: "Entrer votre prénom"
+          ),
+        ):Container(),
+        const SizedBox(height:10),
+
+
+
+        //nom
+
+        (selection[0]==false)?TextField(
+          controller: nom,
+          decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              hintText: "Entrer votre nom"
+          ),
+        ):Container(),
         const SizedBox(height:10),
 
         //mail
@@ -121,12 +180,19 @@ class _MyHomePageState extends State<MyHomePage> {
             shape: const StadiumBorder()
           ),
             onPressed: (){
-            //passage d'une page à une autre
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context){
-                    return DashBoardView(mail: mail.text,password: password.text,);
-                  }
-              ));
+
+              if(selection[0]== false){
+                //si on en mode inscription
+                FirestoreHelper().Inscription(mail.text, password.text, nom.text, prenom.text);
+              }
+              else
+                {
+                  //si en mode connexion
+                }
+
+
+
+
             },
             child: const Text("Validation")
         )

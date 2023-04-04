@@ -1,6 +1,7 @@
 //C'est de faire les opérations sur la base de donnée
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digitaldschool/model/utilisateur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -18,11 +19,11 @@ class FirestoreHelper {
   //méthode
 
   //créer un utilisateur dans la base
-  Inscription(String email, String password, String nom , String prenom) async{
+   Future<Utilisateur> Inscription(String email, String password, String nom , String prenom) async{
     //creer dans l'authentification
       UserCredential credential = await auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = credential.user;
-      if (user == null) {return;}
+      if (user == null) {return Future.error("error");}
       else {
         String uid = user.uid;
         Map<String,dynamic> map = {
@@ -32,10 +33,19 @@ class FirestoreHelper {
         };
         //stocker dans la partie du firestore database
         addUser(uid,map);
+        return getUser(uid);
 
       }
 
 
+
+  }
+
+
+  //Récupérer les infos de l'utilisateur
+  Future<Utilisateur> getUser(String id) async {
+     DocumentSnapshot snapshots =await cloudUsers.doc(id).get();
+     return Utilisateur(snapshots);
 
   }
 
