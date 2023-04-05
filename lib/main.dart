@@ -1,4 +1,5 @@
 import 'package:digitaldschool/controller/FirestoreHepler.dart';
+import 'package:digitaldschool/controller/home_page.dart';
 import 'package:digitaldschool/controller/permission_helper.dart';
 import 'package:digitaldschool/globale.dart';
 import 'package:digitaldschool/view/dashboard_view.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
