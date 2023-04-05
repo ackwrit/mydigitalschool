@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:digitaldschool/controller/FirestoreHepler.dart';
+import 'package:digitaldschool/controller/liste_personne.dart';
 import 'package:digitaldschool/globale.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -76,8 +77,8 @@ class _DashBoardViewState extends State<DashBoardView> {
         });
 
       },
-      children: [
-        Text("première page"),
+      children: const [
+        ListPersonn(),
         Text("Deuxième page"),
         Text("Troisème page"),
       ],
